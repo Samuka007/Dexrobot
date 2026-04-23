@@ -181,7 +181,7 @@ Tasks are organized into four difficulty tiers based on contact sensitivity and 
 
 ## Method Library
 
-DexBench provides reference implementations for 19 methods across three paradigms. All methods share a unified observation/action interface.
+DexBench provides reference implementations for **17 independent methods** across three paradigms, alongside two configurable combination frameworks — [VLA-02](methods/vla/VLA-02.md) and [VLA-05](methods/vla/VLA-05.md) — each pairing a VLM planner with a pluggable low-level executor. All methods share a unified observation/action interface.
 
 ### Reinforcement Learning
 
