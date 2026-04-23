@@ -9,6 +9,7 @@
 - π0.5 论文：[π0.5: a Vision-Language-Action Model with Open-World Generalization](https://arxiv.org/abs/2504.16054)（Black et al. / Physical Intelligence, 2025）
 - π0 代码：[physical-intelligence/openpi](https://github.com/physical-intelligence/openpi)
 - Hi Robot：*TODO — 补充 Hi Robot 论文链接*
+- Qwen3-VL 代码：[QwenLM/Qwen3](https://github.com/QwenLM/Qwen3)
 
 ---
 
@@ -18,8 +19,8 @@
 
 | 层次 | 模型 | 职责 | 运行频率 |
 |------|------|------|---------|
-| 高层（VLM）| 大型视觉语言模型 | 语义分解、任务监控、中途指令修正 | 极低频（关键事件触发）|
-| 低层（策略）| 轻量动作生成模型（流匹配 / 扩散）| 执行具体动作序列 | 高频（10–50 Hz）|
+| 高层（VLM）| Qwen3-VL | 语义分解、任务监控、中途指令修正 | 极低频（关键事件触发）|
+| 低层（策略）| 可插拔执行器（见下表）| 执行具体动作序列 | 高频（10–50 Hz）|
 
 **与 VLA-02（固定规划-执行分离）的区别：**
 - VLA-02：VLM 在任务开始时规划，执行期间不再介入
@@ -32,18 +33,38 @@
 
 ---
 
+## 可选低层策略
+
+| 执行器 | 推理步数 | 多模态建模 | 实机验证 | 适合场景 |
+|--------|---------|-----------|---------|---------|
+| Diffusion Policy（IL-01）| 10–20 步 | ✓✓ | ✓ | 精度优先 |
+| Flow Matching（IL-03）| 1–2 步 | ✓✓ | ✓ | 延迟敏感、高频控制 |
+| ACT | 1 步 | ✓ | ✓✓ | 真机部署、双手操作 |
+| Consistency Policy | 1 步 | ✓✓ | △ | 速度与精度折中 |
+| Transformer BC | 1 步 | ✗ | ✓ | 下界基线对比 |
+
+**推荐组合：**
+- T10（开放词汇）：Qwen3-VL + Flow Matching（VLM 已占主要推理时间，执行器需快速响应）
+- T11（长时程）：Qwen3-VL + ACT（子任务切换频繁，ACT 的动作分块机制适合段落式执行）
+
+---
+
 ## 在 DexBench 中的适配
 
 | 设置 | 说明 |
 |------|------|
 | 仿真环境 | Isaac Lab |
-| 高层 VLM | Qwen2-VL 或同类模型 |
-| 低层策略 | 流匹配策略（IL-03）或 Diffusion Policy（IL-01）|
+| 高层 VLM | Qwen3-VL |
+| 低层策略 | 见上表，默认使用 Flow Matching（IL-03）|
 | 适用任务 | T10（开放词汇，强调语义理解）、T11（长时程，强调动态任务调度）|
-| 对照实验 | 与 VLA-02 对比：固定规划 vs. 动态介入的长时程任务性能差异 |
+| 对照实验 | 与 VLA-02 对比：固定规划 vs. 动态介入的长时程任务性能差异；同时对比不同低层策略 |
 
 ---
 
 ## 参考资料
 
 - Black, K., et al. (2025). *π0.5: a Vision-Language-Action Model with Open-World Generalization*. arXiv:2504.16054.
+- Zhao, T., et al. (2023). *Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware*. arXiv:2304.13705.（ACT）
+- Chi, C., et al. (2023). *Diffusion Policy: Visuomotor Policy Learning via Action Diffusion*. arXiv:2303.04137.
+- Black, K., et al. (2024). *π0: A Vision-Language-Action Flow Model for General Robot Control*. arXiv:2410.24164.
+- Prasad, A., et al. (2024). *Consistency Policy: Accelerated Visuomotor Policies via Consistency Distillation*. arXiv:2405.07503.
