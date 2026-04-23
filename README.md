@@ -181,7 +181,7 @@ Tasks are organized into four difficulty tiers based on contact sensitivity and 
 
 ## Method Library
 
-DexBench provides reference implementations for **17 independent methods** across three paradigms, alongside two configurable combination frameworks — [VLA-02](methods/vla/VLA-02.md) and [VLA-05](methods/vla/VLA-05.md) — each pairing a VLM planner with a pluggable low-level executor. All methods share a unified observation/action interface.
+DexBench provides reference implementations for **17 independent methods** across three paradigms, alongside two configurable combination frameworks — [VLA-02](methods/vla/VLA-02.md) and [VLA-05](methods/vla/VLA-05.md) — each pairing a VLM with a pluggable action model. All methods share a unified observation/action interface.
 
 ### Reinforcement Learning
 
@@ -210,7 +210,7 @@ DexBench provides reference implementations for **17 independent methods** acros
 | ID | Method | Key Idea | Tactile | Target Tasks |
 |----|--------|----------|---------|-------------|
 | [VLA-01](methods/vla/VLA-01.md) | OpenVLA-OFT Baseline | Open-source VLA with LoRA fine-tuning; language-conditioned grasping baseline | ✗ | T01, T10 |
-| [VLA-02](methods/vla/VLA-02.md) | VLM Planner + Diffusion Executor | VLM (Qwen2-VL) decomposes task into keypoints/subgoals; diffusion policy executes | ✗ | T10, T11 |
+| [VLA-02](methods/vla/VLA-02.md) | VLM + Action Model | Qwen3-VL handles semantic planning; action model (Diffusion Policy / Flow Matching / ACT / etc.) executes | ✗ | T10, T11 |
 | [VLA-03](methods/vla/VLA-03.md) | VLA + ForceVLA-MoE | Insert force/tactile MoE routing module before VLA action decoding head | ✓ | T04, T05, T07 |
 | [VLA-04](methods/vla/VLA-04.md) | VLA-Touch (Non-invasive) | Tactile-language model generates semantic tactile descriptions → VLM planner; diffusion controller applies online corrections without retraining base VLA | ✓ | T04, T07 |
 | [VLA-05](methods/vla/VLA-05.md) | Hierarchical VLA | VLM handles semantic decomposition and mid-task instruction correction; low-level policy executes; inspired by Hi Robot / π0.5 | ✗ | T10, T11 |
